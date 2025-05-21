@@ -17,11 +17,44 @@ import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
 import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 
+// Others
+import { v4 as uuidv4 } from "uuid";
+
 import Grid from "@mui/material/Grid";
 // Components
+
 import Todo from "./Todo";
 
+const todos = [
+  {
+    id: uuidv4(),
+    title: "Read the books",
+    details: "Complete before end this month",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "Read the books",
+    details: "Complete before end this month",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "Read the books",
+    details: "Complete before end this month",
+    isCompleted: false,
+  },
+];
+
 export default function TodoList() {
+
+  const TodoData = () => {
+    return todos.map((t) => {
+      console.log("t", t);
+      
+      return <Todo key={t.id} title={t.title} details={t.details}/>
+    })
+  }
   return (
     <Container maxWidth="md">
       <Card style={{ size: "100" }}>
@@ -31,7 +64,7 @@ export default function TodoList() {
             variant="h2"
             gutterBottom
             sx={{ color: "text.secondary" }}
-          >
+            >
             List
           </Typography>
           <Divider />
@@ -44,7 +77,7 @@ export default function TodoList() {
             // onChange={handleAlignment}
             aria-label="text alignment"
             fullWidth
-          >
+            >
             <ToggleButton value="">All</ToggleButton>
             <ToggleButton value="">Done</ToggleButton>
             <ToggleButton value="">In Progress</ToggleButton>
@@ -52,28 +85,29 @@ export default function TodoList() {
           {/*========= FILTER BUTTONS ===========*/}
 
           {/* TODO LIST */}
-          <Todo />
+        {/* <Todo/> */}
+            <TodoData></TodoData>
 
           {/* input + add button */}
-          <Grid container>
+          <Grid container style={{ marginTop: "50px" }}>
             <Grid
               size={8}
               display="flex"
               justifyContent="space-around"
               alignItems="center"
               style={{
-                background: "green",
+                // background: "green",
                 padding: "10px 20px",
                 borderRadius: "10px",
                 marginBottom: "10px",
               }}
-            >
+              >
               <TextField
+                style={{ width: "100%" }}
                 id="outlined-basic"
-                label="Outlined"
+                label="title mission"
                 variant="outlined"
               />
-              tetst
             </Grid>
 
             <Grid
@@ -83,12 +117,16 @@ export default function TodoList() {
               alignItems="center"
               style={{
                 background: "purple",
-                padding: "10px 20px",
                 borderRadius: "10px",
-                marginBottom: "10px",
+                marginBottom: "25px",
               }}
             >
-              tetst
+              <Button
+                style={{ width: "100%", height: "100%" }}
+                variant="contained"
+              >
+                Add
+              </Button>
             </Grid>
           </Grid>
 
