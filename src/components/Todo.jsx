@@ -14,7 +14,7 @@ import EditIcon from "@mui/icons-material/Edit";
 export default function Todo( props) {
   return (
     <>
-      <Card maxWidth="md" sx={{ color: "#fff", marginTop: 5 }}>
+      <Card maxWidth="ms" sx={{ color: "#fff", marginTop: 5 }}>
         <CardContent>
           {/* {Array.from({ length: 5 }, (_, index) => (
           ))} */}

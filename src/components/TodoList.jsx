@@ -25,7 +25,9 @@ import Grid from "@mui/material/Grid";
 
 import Todo from "./Todo";
 
-const todos = [
+import { useState } from "react";
+
+const inisialTodos = [
   {
     id: uuidv4(),
     title: "Read the books",
@@ -47,13 +49,25 @@ const todos = [
 ];
 
 export default function TodoList() {
+  const [todos, setTodos] = useState(inisialTodos);
+  const [titleInput, setTitleInput] = useState("");
 
   const TodoData = () => {
     return todos.map((t) => {
       console.log("t", t);
-      
-      return <Todo key={t.id} title={t.title} details={t.details}/>
-    })
+
+      return <Todo key={t.id} title={t.title} details={t.details} />;
+    });
+  };
+  function handleAddClick() {
+    const newTodo = {
+      id: uuidv4(),
+      title: titleInput,
+      details: "",
+      isCompleted: false
+    }
+    setTodos([...todos, newTodo])
+    
   }
   return (
     <Container maxWidth="md">
@@ -64,7 +78,7 @@ export default function TodoList() {
             variant="h2"
             gutterBottom
             sx={{ color: "text.secondary" }}
-            >
+          >
             List
           </Typography>
           <Divider />
@@ -77,7 +91,7 @@ export default function TodoList() {
             // onChange={handleAlignment}
             aria-label="text alignment"
             fullWidth
-            >
+          >
             <ToggleButton value="">All</ToggleButton>
             <ToggleButton value="">Done</ToggleButton>
             <ToggleButton value="">In Progress</ToggleButton>
@@ -85,8 +99,8 @@ export default function TodoList() {
           {/*========= FILTER BUTTONS ===========*/}
 
           {/* TODO LIST */}
-        {/* <Todo/> */}
-            <TodoData></TodoData>
+          {/* <Todo/> */}
+          <TodoData></TodoData>
 
           {/* input + add button */}
           <Grid container style={{ marginTop: "50px" }}>
@@ -101,12 +115,16 @@ export default function TodoList() {
                 borderRadius: "10px",
                 marginBottom: "10px",
               }}
-              >
+            >
               <TextField
                 style={{ width: "100%" }}
                 id="outlined-basic"
                 label="title mission"
                 variant="outlined"
+                value={titleInput}
+                onChange={(e) => {
+                  setTitleInput(e.target.value);
+                } }
               />
             </Grid>
 
@@ -124,6 +142,7 @@ export default function TodoList() {
               <Button
                 style={{ width: "100%", height: "100%" }}
                 variant="contained"
+                onClick={handleAddClick}
               >
                 Add
               </Button>
