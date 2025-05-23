@@ -11,9 +11,79 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CheckButton from "@mui/icons-material/Check";
 import EditIcon from "@mui/icons-material/Edit";
 
-export default function Todo( props) {
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
+import { useContext, useState } from "react";
+import { TodosContext } from "../context/todosContext";
+
+export default function Todo({ Todo, handeCheck }) {
+  const [showDeleteDialog, setshowDeleteDialog] = useState(false);
+
+  const { todos, setTodos } = useContext(TodosContext);
+
+  // Event handlers
+  function handelDeleteClick() {
+    setshowDeleteDialog(true);
+  }
+
+  function handleClose() {
+    setshowDeleteDialog(false);
+  }
+
+  function handleDeleteConfirm() {
+    const updatedTodos = todos.filter((f) => {
+      if (f.id == Todo.id) {
+        return false
+      } else {
+        return true
+      }
+
+    }) 
+     setTodos(updatedTodos);
+
+  }
+
+  function handleCheckClick() {
+    const updatedTodos = todos.map((t) => {
+      if (t.id == Todo.id) {
+        t.isCompleted = !t.isCompleted; // toggle isCompleted
+      }
+      return t;
+    });
+    setTodos(updatedTodos);
+  }
+
+  // Event handlers
+
   return (
     <>
+      {/* Delete Modal */}
+
+      <Dialog
+        onClose={handleClose}
+        open={showDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Do you want delete this card ?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            after delete it doesn't returned{" "}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button autoFocus onClick={handleDeleteConfirm}>Agree</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ===== Delete Modal ====== */}
       <Card maxWidth="ms" sx={{ color: "#fff", marginTop: 5 }}>
         <CardContent>
           {/* {Array.from({ length: 5 }, (_, index) => (
@@ -30,11 +100,11 @@ export default function Todo( props) {
           >
             <Grid size={8}>
               <Typography variant="h5" style={{ textAlign: "left" }}>
-                {props.title}
+                {Todo.title}
               </Typography>
 
               <Typography variant="h5" style={{ textAlign: "left" }}>
-                {props.details}
+                {Todo.details}
               </Typography>
             </Grid>
             {/* Action Buttons */}
@@ -44,17 +114,23 @@ export default function Todo( props) {
               justifyContent="space-around"
               alignItems="center"
             >
+              {/* Chack button */}
+
               <CheckButton
+                onClick={() => {
+                  handleCheckClick();
+                }}
                 className="icon-button"
                 aria-label="delete"
                 style={{
-                  color: "green",
-                  background: "white",
+                  color: Todo.isCompleted ? "white" : "green",
+                  background: Todo.isCompleted ? "green" : "white",
                   border: "solid green 2px",
                 }}
-              >
-                <DeleteIcon />
-              </CheckButton>
+              ></CheckButton>
+
+              {/* chack buton */}
+
               <EditIcon
                 className="icon-button"
                 aria-label="delete"
@@ -66,7 +142,11 @@ export default function Todo( props) {
               >
                 <DeleteIcon />
               </EditIcon>
+
+              {/* ============== delete button ============ */}
               <DeleteIcon
+              
+                onClick={handelDeleteClick}
                 className="icon-button"
                 aria-label="delete"
                 style={{
@@ -74,9 +154,9 @@ export default function Todo( props) {
                   background: "white",
                   border: "solid red 2px",
                 }}
-              >
-                <DeleteIcon />
-              </DeleteIcon>
+              ></DeleteIcon>
+
+              {/*========== delete button ==========*/}
             </Grid>
             {/* Action Buttons  */}
           </Grid>
