@@ -18,56 +18,40 @@ import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
 import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 
 // Others
-import { v4 as uuidv4 } from "uuid";
 
 import Grid from "@mui/material/Grid";
 // Components
-
+import { TodosContext } from "../context/todosContext";
 import Todo from "./Todo";
-
+import { useContext } from "react";
 import { useState } from "react";
-
-const inisialTodos = [
-  {
-    id: uuidv4(),
-    title: "Read the books",
-    details: "Complete before end this month",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "Read the books",
-    details: "Complete before end this month",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "Read the books",
-    details: "Complete before end this month",
-    isCompleted: false,
-  },
-];
+import { v4 as uuidv4 } from "uuid";
 
 export default function TodoList() {
-  const [todos, setTodos] = useState(inisialTodos);
+
+  const {todos, setTodos} = useContext(TodosContext)
   const [titleInput, setTitleInput] = useState("");
+
+
 
   const TodoData = () => {
     return todos.map((t) => {
-      console.log("t", t);
-
-      return <Todo key={t.id} title={t.title} details={t.details} />;
+      console.log("testt", todos);
+      
+      // console.log("t", t);
+      return <Todo key={t.id} Todo={t}/>;
     });
   };
   function handleAddClick() {
+   
     const newTodo = {
       id: uuidv4(),
       title: titleInput,
       details: "",
-      isCompleted: false
-    }
-    setTodos([...todos, newTodo])
-    
+      isCompleted: false,
+    };
+    setTodos([...todos, newTodo]);
+    setTitleInput("");
   }
   return (
     <Container maxWidth="md">
@@ -124,7 +108,7 @@ export default function TodoList() {
                 value={titleInput}
                 onChange={(e) => {
                   setTitleInput(e.target.value);
-                } }
+                }}
               />
             </Grid>
 
