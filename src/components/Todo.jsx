@@ -19,8 +19,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import { useContext, useState } from "react";
 import { TodosContext } from "../context/todosContext";
+import TextField from "@mui/material/TextField";
 
 export default function Todo({ Todo, handeCheck }) {
+  const [showUpdateDialog, setshowUpdateDialog] = useState(false);
   const [showDeleteDialog, setshowDeleteDialog] = useState(false);
 
   const { todos, setTodos } = useContext(TodosContext);
@@ -30,21 +32,31 @@ export default function Todo({ Todo, handeCheck }) {
     setshowDeleteDialog(true);
   }
 
-  function handleClose() {
+  function handleDeleteDialogClose() {
     setshowDeleteDialog(false);
+  }
+
+  function handelUpdateClick() {
+    setshowUpdateDialog(true);
+  }
+
+  function handleUpdateDialogClose() {
+    setshowUpdateDialog(false);
   }
 
   function handleDeleteConfirm() {
     const updatedTodos = todos.filter((f) => {
       if (f.id == Todo.id) {
-        return false
+        return false;
       } else {
-        return true
+        return true;
       }
+    });
+    setTodos(updatedTodos);
+  }
 
-    }) 
-     setTodos(updatedTodos);
-
+  function handleUpdateConfirm() {
+    alert("test")
   }
 
   function handleCheckClick() {
@@ -64,7 +76,7 @@ export default function Todo({ Todo, handeCheck }) {
       {/* Delete Modal */}
 
       <Dialog
-        onClose={handleClose}
+        onClose={handleDeleteDialogClose}
         open={showDeleteDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
@@ -78,12 +90,58 @@ export default function Todo({ Todo, handeCheck }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button autoFocus onClick={handleDeleteConfirm}>Agree</Button>
+          <Button onClick={handleDeleteDialogClose}>Disagree</Button>
+          <Button autoFocus onClick={handleDeleteConfirm}>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+      {/* ===== Delete Modal ====== */}
+
+      {/* Update Modal */}
+      <Dialog
+        onClose={handleUpdateDialogClose}
+        open={showUpdateDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Do you want delete this card ?"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="email"
+            label="Title"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+            <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="email"
+            label="description"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleUpdateDialogClose}>Disagree</Button>
+          <Button autoFocus onClick={handleUpdateConfirm}>
+            Agree
+          </Button>
         </DialogActions>
       </Dialog>
 
-      {/* ===== Delete Modal ====== */}
+      {/* Update Modal */}
+
       <Card maxWidth="ms" sx={{ color: "#fff", marginTop: 5 }}>
         <CardContent>
           {/* {Array.from({ length: 5 }, (_, index) => (
@@ -132,6 +190,7 @@ export default function Todo({ Todo, handeCheck }) {
               {/* chack buton */}
 
               <EditIcon
+              onClick={handelUpdateClick}
                 className="icon-button"
                 aria-label="delete"
                 style={{
@@ -145,7 +204,6 @@ export default function Todo({ Todo, handeCheck }) {
 
               {/* ============== delete button ============ */}
               <DeleteIcon
-              
                 onClick={handelDeleteClick}
                 className="icon-button"
                 aria-label="delete"
