@@ -22,9 +22,9 @@ import { TodosContext } from "../context/todosContext";
 import TextField from "@mui/material/TextField";
 
 export default function Todo({ Todo, handeCheck }) {
-  const [showUpdateDialog, setshowUpdateDialog] = useState(false);
   const [showDeleteDialog, setshowDeleteDialog] = useState(false);
-
+  const [showUpdateDialog, setshowUpdateDialog] = useState(false);
+  const [updateTodos, setUpdateTodos] = useState({ title: "", details: "" });
   const { todos, setTodos } = useContext(TodosContext);
 
   // Event handlers
@@ -56,7 +56,15 @@ export default function Todo({ Todo, handeCheck }) {
   }
 
   function handleUpdateConfirm() {
-    alert("test")
+    const updatedTodos = todos.map((t) => {
+      if(t.id == Todo.id){
+        return {...t, title: updateTodos.title, details: updateTodos.details}
+      } else {
+        return t
+      }
+    })
+    setTodos(updatedTodos)
+    setshowUpdateDialog(false)
   }
 
   function handleCheckClick() {
@@ -91,6 +99,7 @@ export default function Todo({ Todo, handeCheck }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDeleteDialogClose}>Disagree</Button>
+
           <Button autoFocus onClick={handleDeleteConfirm}>
             Agree
           </Button>
@@ -113,23 +122,29 @@ export default function Todo({ Todo, handeCheck }) {
             autoFocus
             required
             margin="dense"
-            id="name"
-            name="email"
+            id="title"
+            name="title"
             label="Title"
-            type="email"
             fullWidth
             variant="standard"
+            value={updateTodos.title}
+            onChange={(e) => {
+              setUpdateTodos({...updateTodos, title: e.target.value})
+            }}
           />
-            <TextField
+          <TextField
             autoFocus
             required
             margin="dense"
-            id="name"
-            name="email"
+            id="description"
+            name="description"
             label="description"
-            type="email"
             fullWidth
             variant="standard"
+            value={updateTodos.details}
+            onChange={(e) => {
+              setUpdateTodos({...updateTodos, details: e.target.value})
+            }}
           />
         </DialogContent>
         <DialogActions>
@@ -189,8 +204,9 @@ export default function Todo({ Todo, handeCheck }) {
 
               {/* chack buton */}
 
+              {/* Update button */}
               <EditIcon
-              onClick={handelUpdateClick}
+                onClick={handelUpdateClick}
                 className="icon-button"
                 aria-label="delete"
                 style={{
@@ -201,6 +217,8 @@ export default function Todo({ Todo, handeCheck }) {
               >
                 <DeleteIcon />
               </EditIcon>
+
+              {/* =========== Update button =============*/}
 
               {/* ============== delete button ============ */}
               <DeleteIcon
